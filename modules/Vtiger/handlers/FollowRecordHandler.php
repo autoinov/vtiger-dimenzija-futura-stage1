@@ -140,9 +140,17 @@ class FollowRecordHandler extends VTEventHandler {
 		Emails_Mailer_Model::updateMessageIdByCrmId($generatedMessageId, $recordId);
 
 		$mailer = new Emails_Mailer_Model();
-		$mailer->reinitialize();
-		$mailer->Body = $body;
-		$mailer->Subject = decode_html($subject);
+        $mailer->reinitialize();
+
+        // ADD TRACKING PIXEL
+        $applicationKey = vglobal('application_unique_key');
+        $trackingURL = "https://crm.dimenzija-futura.hr/vtigerstage1/modules/Emails/actions/TrackAccess.php?record={$recordId}&parentId={$recordId}&applicationKey={$applicationKey}";
+        $trackingPixel = '<img src="' . $trackingURL . '" width="1" height="1" style="display:none;" />';
+        $body .= $trackingPixel;
+
+        // ORIGINAL
+        $mailer->Body = $body;
+        $mailer->Subject = decode_html($subject);
 
 		$activeUserModel = $this->getActiveUserModel();
 		$replyTo = decode_html($activeUserModel->email1);

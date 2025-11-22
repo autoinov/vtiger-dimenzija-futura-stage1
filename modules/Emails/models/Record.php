@@ -495,19 +495,75 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 	 * Function to update Email track(opens) details.
 	 * @param <String> $parentId
 	 */
-	public function updateTrackDetails($parentId) {
-		$db = PearDatabase::getInstance();
-		$recordId = $this->getId();
+	
+   public function updateTrackDetails($parentId) {
+    $logFile = __DIR__ . '/../actions/debug.txt';
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " >>> ENTERED updateTrackDetails()\n", FILE_APPEND);
+    $db = PearDatabase::getInstance();
+    $recordId = $this->getId();
 
-		$db->pquery("INSERT INTO vtiger_email_access(crmid, mailid, accessdate, accesstime) VALUES(?, ?, ?, ?)", array($parentId, $recordId, date('Y-m-d'), date('Y-m-d H:i:s')));
+    $logFile = __DIR__ . '/../actions/debug.txt'; // Reuse the same debug log as TrackAccess
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - updateTrackDetails() called for record: $recordId, parent: $parentId\n", FILE_APPEND);
 
-		$result = $db->pquery("SELECT 1 FROM vtiger_email_track WHERE crmid = ? AND mailid = ?", array($parentId, $recordId));
-		if ($db->num_rows($result)>0) {
-			$db->pquery("UPDATE vtiger_email_track SET access_count = access_count+1 WHERE crmid = ? AND mailid = ?", array($parentId, $recordId));
-		} else {
-			$db->pquery("INSERT INTO vtiger_email_track(crmid, mailid, access_count) values(?, ?, ?)", array($parentId, $recordId, 1));
-		}
-	}
+    if (!$recordId || !$parentId) {
+        file_put_contents($logFile, "Invalid recordId or parentId\n", FILE_APPEND);
+        return;
+    }
+
+    // Insert into vtiger_email_access
+    $res1 = $db->pquery(
+        "INSERT INTO vtiger_email_access (crmid, mailid, accessdate, accesstime) VALUES (?, ?, ?, ?)",
+        array($parentId, $recordId, date('Y-m-d'), date('Y-m-d H:i:s'))
+    );
+
+    if ($res1 === false) {
+        file_put_contents($logFile, "Failed to insert into vtiger_email_access\n", FILE_APPEND);
+        return;
+    } else {
+        file_put_contents($logFile, "Inserted into vtiger_email_access\n", FILE_APPEND);
+    }
+
+    // Check if track entry exists
+    $res2 = $db->pquery(
+        "SELECT 1 FROM vtiger_email_track WHERE crmid = ? AND mailid = ?",
+        array($parentId, $recordId)
+    );
+
+    if ($db->num_rows($res2) > 0) {
+        $res3 = $db->pquery(
+            "UPDATE vtiger_email_track SET access_count = access_count + 1 WHERE crmid = ? AND mailid = ?",
+            array($parentId, $recordId)
+        );
+        if ($res3 === false) {
+            file_put_contents($logFile, "Failed to update vtiger_email_track\n", FILE_APPEND);
+        } else {
+            file_put_contents($logFile, "Updated access_count in vtiger_email_track\n", FILE_APPEND);
+        }
+    } else {
+        $res4 = $db->pquery(
+            "INSERT INTO vtiger_email_track (crmid, mailid, access_count) VALUES (?, ?, ?)",
+            array($parentId, $recordId, 1)
+        );
+        if ($res4 === false) {
+            file_put_contents($logFile, "Failed to insert into vtiger_email_track\n", FILE_APPEND);
+        } else {
+            file_put_contents($logFile, "Inserted new row into vtiger_email_track\n", FILE_APPEND);
+        }
+    }
+
+    file_put_contents($logFile, "Completed updateTrackDetails()\n", FILE_APPEND);
+}
+
+
+public function testLoggerPing() {
+    file_put_contents(__DIR__ . '/../actions/debug.txt', date('Y-m-d H:i:s') . " >>> testLoggerPing called\n", FILE_APPEND);
+}
+
+   
+
+
+
+
 
 	/**
 	 * Function to set Access count value by default as 0
@@ -521,23 +577,26 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 	}
 
 	public function getClickCountValue($parentId){
-		$db = PearDatabase::getInstance();
-
-		$result = $db->pquery("SELECT click_count FROM vtiger_email_track WHERE crmid = ? AND mailid = ?", array($parentId, $this->getId()));
-		return $db->query_result($result, 0, 'click_count');
-	}
-
+    $db = PearDatabase::getInstance();
+    $result = $db->pquery("SELECT click_count FROM vtiger_email_track WHERE crmid = ? AND mailid = ?", array($parentId, $this->getId()));
+    if ($db->num_rows($result) > 0) {
+        return $db->query_result($result, 0, 'click_count');
+    }
+   
+}
 	/**
 	 * Function to get Access count value
 	 * @param <String> $parentId
 	 * @return <String>
 	 */
-	public function getAccessCountValue($parentId) {
-		$db = PearDatabase::getInstance();
-
-		$result = $db->pquery("SELECT access_count FROM vtiger_email_track WHERE crmid = ? AND mailid = ?", array($parentId, $this->getId()));
-		return $db->query_result($result, 0, 'access_count');
-	}
+	public function getAccessCountValue($parentId){
+    $db = PearDatabase::getInstance();
+    $result = $db->pquery("SELECT access_count FROM vtiger_email_track WHERE crmid = ? AND mailid = ?", array($parentId, $this->getId()));
+    if ($db->num_rows($result) > 0) {
+        return $db->query_result($result, 0, 'access_count');
+    }
+    
+}
 
 	public static function getTrackingInfo($emailIds,$parentId) {
 		if(!is_array($emailIds)) {
@@ -836,4 +895,6 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		}
 		return false;
 	}
+
+    
 }
