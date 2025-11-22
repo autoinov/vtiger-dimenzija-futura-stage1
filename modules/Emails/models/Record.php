@@ -42,10 +42,12 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		}
 	}
 
-	/**
+
+    	/**
 	 * Function sends mail
 	 */
 	public function send($addToQueue = false) {
+        
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$rootDirectory = vglobal('root_directory');
 		$logo = false;
@@ -482,14 +484,18 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 	 * Function check email track enabled or not
 	 * @return <boolean> true/false
 	 */
-	public function isEmailTrackEnabled() {
-		$emailTracking = vglobal("email_tracking");
-		if($emailTracking == 'Yes'){
-			return true;
-		} else {
-			return false;
-		}
-	}
+	// public function isEmailTrackEnabled() {
+	// 	$emailTracking = vglobal("email_tracking");
+	// 	if($emailTracking == 'Yes'){
+	// 		return true;
+	// 	} else {
+	// 		return false;
+	// 	}
+	// }
+
+    public function isEmailTrackEnabled() {
+    return true;
+}
 
 	/**
 	 * Function to update Email track(opens) details.
@@ -578,25 +584,73 @@ public function testLoggerPing() {
 
 	public function getClickCountValue($parentId){
     $db = PearDatabase::getInstance();
-    $result = $db->pquery("SELECT click_count FROM vtiger_email_track WHERE crmid = ? AND mailid = ?", array($parentId, $this->getId()));
+
+    // Simple debug log message to confirm execution
+    file_put_contents(
+        'C:\wamp64\www\darkocrm\vtiger\email_debug.log',
+        date('Y-m-d H:i:s') . " - getClickCountValue called for crmid: $parentId, mailid: {$this->getId()}\n",
+        FILE_APPEND
+    );
+
+    $result = $db->pquery(
+        "SELECT click_count FROM vtiger_email_track WHERE crmid = ? AND mailid = ?",
+        array($parentId, $this->getId())
+    );
+
+    // Optional: log the result if needed
     if ($db->num_rows($result) > 0) {
-        return $db->query_result($result, 0, 'click_count');
+        $clickCount = $db->query_result($result, 0, 'click_count');
+        file_put_contents(
+            'C:\wamp64\www\darkocrm\vtiger\email_debug.log',
+            date('Y-m-d H:i:s') . " - Retrieved click_count: $clickCount\n",
+            FILE_APPEND
+        );
+        return $clickCount;
+    } else {
+        file_put_contents(
+            'C:\wamp64\www\darkocrm\vtiger\email_debug.log',
+            date('Y-m-d H:i:s') . " - No rows returned for crmid: $parentId, mailid: {$this->getId()}\n",
+            FILE_APPEND
+        );
+        return 0;
     }
-   
 }
+
 	/**
 	 * Function to get Access count value
 	 * @param <String> $parentId
 	 * @return <String>
 	 */
-	public function getAccessCountValue($parentId){
+	public function getAccessCountValue($parentId) {
     $db = PearDatabase::getInstance();
+
+    // Always log that this function was called
+    file_put_contents(
+        'C:\wamp64\www\darkocrm\vtiger\email_debug.log',
+        date('Y-m-d H:i:s') . " - getAccessCountValue CALLED - crmid: $parentId, mailid: {$this->getId()}\n",
+        FILE_APPEND
+    );
+
     $result = $db->pquery("SELECT access_count FROM vtiger_email_track WHERE crmid = ? AND mailid = ?", array($parentId, $this->getId()));
+
     if ($db->num_rows($result) > 0) {
-        return $db->query_result($result, 0, 'access_count');
+        $accessCount = $db->query_result($result, 0, 'access_count');
+        file_put_contents(
+            'C:\wamp64\www\darkocrm\vtiger\email_debug.log',
+            date('Y-m-d H:i:s') . " - access_count FOUND: $accessCount\n",
+            FILE_APPEND
+        );
+        return $accessCount;
+    } else {
+        file_put_contents(
+            'C:\wamp64\www\darkocrm\vtiger\email_debug.log',
+            date('Y-m-d H:i:s') . " - NO access_count FOUND for crmid: $parentId, mailid: {$this->getId()}\n",
+            FILE_APPEND
+        );
+        return 0;
     }
-    
 }
+
 
 	public static function getTrackingInfo($emailIds,$parentId) {
 		if(!is_array($emailIds)) {
