@@ -41,7 +41,7 @@ class Emails_TrackAccess_Action extends Vtiger_Action_Controller {
 	}
 	
 	public function process(Vtiger_Request $request) {
-    file_put_contents(__DIR__ . '/debug.txt', date('Y-m-d H:i:s') . " - TRACK HIT\n", FILE_APPEND);
+    //file_put_contents(__DIR__ . '/debug.txt', date('Y-m-d H:i:s') . " - TRACK HIT\n", FILE_APPEND);
 
     $recordId = $request->get('record');
     $parentId = $request->get('parentId');
