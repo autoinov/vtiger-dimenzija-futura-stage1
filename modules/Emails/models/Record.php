@@ -163,30 +163,19 @@ class Emails_Record_Model extends Vtiger_Record_Model {
             }
             $mailer->Body = $description;
             if ($parentModule) {
-                
-                //ako ne želim pratiti access count
                 //$mailer->Body = $this->convertUrlsToTrackUrls($mailer->Body, $id);;
                 //$mailer->Body .= $this->getTrackImageDetails($id, $this->isEmailTrackEnabled($parentModule));
-            }
-            
-            //prati access count
-            
-            $mailer->Body = $this->convertUrlsToTrackUrls($mailer->Body, $id);
+   $mailer->Body = $this->convertUrlsToTrackUrls($mailer->Body, $id);
 
-            $pixel = $this->getTrackImageDetails($id, $this->isEmailTrackEnabled($parentModule));
-            if (strpos($mailer->Body, '</body>') !== false) {
-                $mailer->Body = str_replace('</body>', $pixel . '</body>', $mailer->Body);
-            } elseif (strpos($mailer->Body, '</html>') !== false) {
-                $mailer->Body = str_replace('</html>', $pixel . '</html>', $mailer->Body);
-            } else {
-                $mailer->Body .= $pixel;
+    $pixel = $this->getTrackImageDetails($id, $this->isEmailTrackEnabled($parentModule));
+    if (strpos($mailer->Body, '</body>') !== false) {
+        $mailer->Body = str_replace('</body>', $pixel . '</body>', $mailer->Body);
+    } elseif (strpos($mailer->Body, '</html>') !== false) {
+        $mailer->Body = str_replace('</html>', $pixel . '</html>', $mailer->Body);
+    } else {
+        $mailer->Body .= $pixel;
+    }
             }
-            
-            
-            
-            
-            
-            
             //Checking whether user requested to add signature or not
             if($this->get('signature') == 'Yes'){
                 $mailer->Signature = $currentUserModel->get('signature');
@@ -204,13 +193,11 @@ class Emails_Record_Model extends Vtiger_Record_Model {
             $plainBody = $this->convertUrlsToTrackUrls($plainBody, $id,'plain');
             $mailer->AltBody = $plainBody;
      //       $mailer->AddAddress($email);
-     
-     
-     //log raw email to root
-          $mailer->preSend();
-            $rawMime = $mailer->getSentMIMEMessage();
-            file_put_contents('mail-dump.eml', $rawMime);
-     
+
+
+     $mailer->preSend();
+$rawMime = $mailer->getSentMIMEMessage();
+file_put_contents('mail-dump.eml', $rawMime);
 
             //Adding attachments to mail
             if(is_array($attachments)) {
@@ -265,48 +252,56 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 					$mailer->updateMessageIdByCrmId($generatedMessageId,$id);
 				}
 
-				$mailString = $mailer->getMailString();
+				$mailString=$mailer->getMailString();
+				$mailBoxModel = MailManager_Mailbox_Model::activeInstance();
+				$folderName = $mailBoxModel->folder();
+				if(!empty($folderName) && !empty($mailString)) {
+					$connector = MailManager_Connector_Connector::connectorWithModel($mailBoxModel, '');
+					$message = str_replace("\n", "\r\n", $mailString);
+					if (function_exists('mb_convert_encoding')) {
+						$folderName = mb_convert_encoding($folderName, "UTF7-IMAP", "UTF-8");
+					}
 
-// Normalize line endings
-$message = preg_replace("/(?<!\r)\n/", "\r\n", $mailString);
+						 
+															
 
-$mailBoxModel = MailManager_Mailbox_Model::activeInstance();
-$folderName = $mailBoxModel->folder();
+															
+									  
 
-if (!empty($folderName) && !empty($message)) {
+                    
+					// propogate change to connected imap mailbox if valid.
+																						
 
-    $connector = MailManager_Connector_Connector::connectorWithModel($mailBoxModel, '');
+												 
+																			 
+	 
 
-    if (function_exists('mb_convert_encoding')) {
-        $folderName = mb_convert_encoding($folderName, "UTF7-IMAP", "UTF-8");
-    }
+									  
+												  
+																								 
+	
+													 
+															 
 
-    // DEBUG: Create test file in ROOT
-    $debugFile = $rootDirectory . 'imap_test.log';
-    file_put_contents($debugFile, date('Y-m-d H:i:s') . " - IMAP block executed\n", FILE_APPEND);
-    
-    // Save RAW MIME (needed for fixing HTML in Sent)
-file_put_contents($rootDirectory . 'imap_raw.eml', $message);
+					if ($connector->mBox) {
 
-    if ($connector->mBox) {
+								
+							 
+						imap_append($connector->mBox, $connector->mBoxUrl.$folderName, $message, "\\Seen");
+					 
+					
+		  
 
-        $appendOK = imap_append(
-            $connector->mBox,
-            $connector->mBoxUrl . $folderName,
-            $message,
-            "\\Seen"
-        );
+						
+													 
+					}
+																																  
+		 
 
-        if ($appendOK) {
-            file_put_contents($debugFile, date('Y-m-d H:i:s') . " - IMAP append SUCCESS\n", FILE_APPEND);
-        } else {
-            file_put_contents($debugFile, date('Y-m-d H:i:s') . " - IMAP append ERROR: " . imap_last_error() . "\n", FILE_APPEND);
-        }
-
-    } else {
-        file_put_contents($debugFile, date('Y-m-d H:i:s') . " - IMAP not connected (mBox empty)\n", FILE_APPEND);
-    }
-}
+			
+																												 
+				}
+ 
 
 
 
