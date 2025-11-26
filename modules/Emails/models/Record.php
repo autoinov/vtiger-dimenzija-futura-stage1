@@ -184,17 +184,18 @@ class Emails_Record_Model extends Vtiger_Record_Model {
                 }
             }
             $mailer->Subject = decode_html(strip_tags($subject));
-
             $plainBody = decode_emptyspace_html($description);
-            $plainBody = preg_replace(array("/<p>/i","/<br>/i","/<br \/>/i"),array("\n","\n","\n"),$plainBody);
-            $plainBody .= "\n\n".$currentUserModel->get('signature');
+            $plainBody = preg_replace(["/<p>/i", "/<br>/i", "/<br \/>/i"], ["\n", "\n", "\n"], $plainBody);
             $plainBody = strip_tags($plainBody);
             $plainBody = Emails_Mailer_Model::convertToAscii($plainBody);
-            $plainBody = $this->convertUrlsToTrackUrls($plainBody, $id,'plain');
+            $userSignature = strip_tags(decode_html($currentUserModel->get('signature')));
+            if (!empty($userSignature)) { $plainBody .= "\n\n" . $userSignature; }
+            $plainBody = $this->convertUrlsToTrackUrls($plainBody, $id, 'plain');
+            if (empty(trim($plainBody))) { $plainBody = 'This is a plain text version of the email.'; }
             $mailer->AltBody = $plainBody;
-     //       $mailer->AddAddress($email);
+            // $mailer->AddAddress($email);
 
-
+//debug tijelo maila
      $mailer->preSend();
 $rawMime = $mailer->getSentMIMEMessage();
 file_put_contents('mail-dump.eml', $rawMime);
@@ -293,7 +294,7 @@ file_put_contents('mail-dump.eml', $rawMime);
 		  
 
 						
-													 
+																										 
 					}
 																																  
 		 
@@ -654,11 +655,13 @@ public function testLoggerPing() {
     // Optional: log the result if needed
     if ($db->num_rows($result) > 0) {
         $clickCount = $db->query_result($result, 0, 'click_count');
-        file_put_contents(
-            'C:\wamp64\www\darkocrm\vtiger\email_debug.log',
-            date('Y-m-d H:i:s') . " - Retrieved click_count: $clickCount\n",
-            FILE_APPEND
-        );
+        
+        //file_put_contents(
+        //    'C:\wamp64\www\darkocrm\vtiger\email_debug.log',
+         //   date('Y-m-d H:i:s') . " - Retrieved click_count: $clickCount\n",
+         //   FILE_APPEND
+        //);
+        
         return $clickCount;
     } else {
         file_put_contents(

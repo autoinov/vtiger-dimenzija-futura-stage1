@@ -97,6 +97,21 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	// END
 
 	$mail_status = MailSend($mail);
+	
+	
+	
+	//debug brojeva recorda poslanih mailova
+	
+
+//if (method_exists($mail, 'preSend')) {
+//    $mail->preSend();
+//   $rawMime = $mail->getSentMIMEMessage();
+//   $filename = '/home/dimenzij/public_html/vtigerstage1/imap_raw_' . date('Ymd_His') . '_' . uniqid() . '.eml';
+//    file_put_contents($filename, $rawMime);
+//}
+
+
+
 
 	if($mail_status != 1)
 	{
@@ -197,7 +212,14 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	//Added back as we have changed php mailer library, older library was using html_entity_decode before sending mail
 	$mail->Body = decode_html($contents);
 	//$mail->Body = html_entity_decode(nl2br($contents));	//if we get html tags in mail then we will use this line
-	$plainBody = decode_html($contents);
+	
+	$plainBody = trim($plainBody);
+    if (empty($plainBody)) {
+    $plainBody = 'This is a plain text version of the email.';
+}
+
+	
+	
 	$plainBody = preg_replace(array("/<p>/i","/<br>/i","/<br \/>/i"),array("\n","\n","\n"),$plainBody);
 	$plainBody = strip_tags($plainBody);
 	$plainBody = Emails_Mailer_Model::convertToAscii($plainBody);
