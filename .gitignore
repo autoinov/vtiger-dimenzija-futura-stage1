@@ -30,6 +30,8 @@ cache/
 cache/*
 test/templates_c/
 test/templates_c/v7/*
+test/upload/
+test/upload/*
 
 # Temp & sessions
 tmp/

@@ -16,6 +16,13 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../include/utils/VtlibUtils.php';
 require_once __DIR__ . '/../../vtlib/Vtiger/Functions.php';
 
+//debug
+        
+        require_once __DIR__ . '/../../config.inc.php';
+        define('SITE_URL', $site_URL); // Now accessible anywhere
+
+
+
 class uploader {
     protected $config = array();
     protected $opener = array();
@@ -44,8 +51,7 @@ class uploader {
     public function __construct() {
 
         
-        //debug
-
+    //debug
         //file_put_contents('uploader-debug-ping.txt', date('Y-m-d H:i:s') . " uploader constructor called\n", FILE_APPEND);
 
         // DISABLE MAGIC QUOTES
@@ -243,8 +249,16 @@ class uploader {
                         @chmod($target, $this->config['filePerms']);
                     $this->makeThumb($target);
                     $url = $this->typeURL;
-                    if (isset($udir)) $url .= "/$udir";
-                    $url .= "/" . path::urlPathEncode(basename($target));
+                    // HARDCODE SITE URL TO FIX IMAGE PATHS IN EMAIL
+
+//debug
+
+//$url = 'https://crm.dimenzija-futura.hr/vtigerstage1/test/upload/images';
+
+        $url = SITE_URL . 'test/upload/images';
+if (isset($udir)) $url .= "/$udir";
+$url .= "/" . path::urlPathEncode(basename($target));
+
                 }
             }
         }

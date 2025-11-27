@@ -24,8 +24,8 @@ $_CONFIG = array(
 
     'theme' => "oxygen",
 
-    'uploadURL' => "/vtigerstage1/test/upload/images",
-    'uploadDir' => "/home/dimenzij/public_html/vtigerstage1/test/upload/images",
+    'uploadURL' => "/vtigerstage1/test/upload",
+    'uploadDir' => "/home/dimenzij/public_html/vtigerstage1/test/upload",
 
     'dirPerms' => 0755,
     'filePerms' => 0644,
