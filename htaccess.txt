@@ -1,9 +1,0 @@
-Options -Indexes
-
-<IfModule pagespeed_module>
-    ModPagespeed Off
-</IfModule>
-ModPagespeedDisableFilters rewrite_images,remove_comments
-ModPagespeedRemoveResourceHeader "PS-CapabilityList"
-ModPagespeedRemoveResourceHeader "X-Mod-Pagespeed"
-
