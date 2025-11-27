@@ -1,0 +1,102 @@
+###############################
+# VTIGER CLEAN DEVELOPMENT
+###############################
+
+# Allow main config files (needed for deploy)
+!config.inc.php
+!config.php
+!config_override.php
+
+# Ignore sensitive or local-only config files
+config_override.dev.php
+config_override.sample.php
+config.db.php
+config.security.php
+
+# Vendor – never commit for vtiger
+vendor/
+vendor/*
+
+# Logs and debug artifacts
+logs/
+*.log
+error_log
+mailmanager_debug.log
+php_debug.log
+debug.log
+
+# Cache & compiled templates
+cache/
+cache/*
+test/templates_c/
+test/templates_c/v7/*
+
+# Temp & sessions
+tmp/
+tmp/*
+backup/
+backup/*
+session/
+session/*
+session_save_path/
+
+# Uploaded files – massive & environment-specific
+storage/
+storage/*
+
+# Auto-generated user privilege files
+user_privileges/
+user_privileges/*.php
+
+# Config Performance folder (auto-generated)
+config.performance.php
+
+# Hosting/system artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+.ftpquota
+FETCH_HEAD
+
+# IDE/editor garbage
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.old
+
+# Git helper outputs
+git_diff_output.txt
+git_status_output.txt
+
+# Test images
+test/logo/logoV.jpg
+
+###############################
+# Allow necessary source code
+###############################
+!modules/
+!libraries/
+!layouts/
+!layouts/v7/
+!layouts/v7/modules/
+!vtlib/
+!include/
+!includes/
+!languages/
+!cron/
+!pkg/
+!test/
+!modules/Emails/handlers/actions/
+
+
+
+
+
+imap_raw.eml
+mail-dump.eml
+modules/Emails/actions/debug.txt
+modules/Emails/models/RecordBackup.php
+phpinfo.php
+test-mail-body-dump.html
