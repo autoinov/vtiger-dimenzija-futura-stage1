@@ -43,6 +43,11 @@ class uploader {
 
     public function __construct() {
 
+        
+        //debug
+
+        //file_put_contents('uploader-debug-ping.txt', date('Y-m-d H:i:s') . " uploader constructor called\n", FILE_APPEND);
+
         // DISABLE MAGIC QUOTES
         if (function_exists('set_magic_quotes_runtime'))
             @set_magic_quotes_runtime(false);
@@ -186,6 +191,13 @@ class uploader {
                 $this->backMsg("Cannot create {dir} folder.", array('dir' => $this->type));
         } elseif (!is_readable($this->typeDir))
             $this->backMsg("Cannot read upload folder.");
+            
+          
+         // $result = file_put_contents('debug-upload-path.txt', $this->typeDir);
+            // if ($result === false) {
+            //     file_put_contents('debug-write-failure.txt', "FAILED to write upload path\n");
+            // }
+
     }
 
     public function upload() {

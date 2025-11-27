@@ -18,14 +18,14 @@
 
 $_CONFIG = array(
 
-    'disabled' => true,
+    'disabled' => false,
     'readonly' => false,
     'denyZipDownload' => true,
 
     'theme' => "oxygen",
 
-    'uploadURL' => "upload",
-    'uploadDir' => "",
+    'uploadURL' => "/vtigerstage1/test/upload/images",
+    'uploadDir' => "/home/dimenzij/public_html/vtigerstage1/test/upload/images",
 
     'dirPerms' => 0755,
     'filePerms' => 0644,
