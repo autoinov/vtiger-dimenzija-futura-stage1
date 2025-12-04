@@ -100,7 +100,7 @@ $upload_dir = 'cache/upload/';
 
 // maximum file size for uploaded files in bytes also used when uploading import files
 // upload_maxsize default value = 3000000
-$upload_maxsize = 3145728;//3MB
+$upload_maxsize = 6145728;//6MB
 
 // flag to allow export functionality
 // 'all' to allow anyone to use exports 
