@@ -6,10 +6,14 @@ class Campaigns_SendEventToContacts_Action extends Vtiger_Action_Controller {
     }
 
     public function process(Vtiger_Request $request) {
+        
         global $adb;
 
         $campaignId = $request->get('record');
         $eventId = $request->get('eventid'); // ✅ Get from dropdown
+        
+        //debug
+        //file_put_contents('send_event_debug.log', "Event ID: $eventId\n", FILE_APPEND);
 
         if (empty($eventId)) {
             $response = new Vtiger_Response();
@@ -35,18 +39,29 @@ class Campaigns_SendEventToContacts_Action extends Vtiger_Action_Controller {
         for ($i = 0; $i < $count; $i++) {
             $contactId = $adb->query_result($result, $i, 'contactid');
             $email = getContactEmail($contactId);
+            
+            //debug
+            //file_put_contents('send_event_debug.log', "Contact ID: $contactId | Email: $email\n", FILE_APPEND);
 
             if ($email) {
                 $success = sendICSInvite($email, $eventData);
+                //debug
+                file_put_contents('send_event_debug.log', "Email success: $success\n", FILE_APPEND);
+                
                 if ($success) {
                     $emailsSent++;
                 }
             }
         }
+        
+        //debug
+
+       //file_put_contents('/home/dimenzij/public_html/vtigerstage1/send_event_debug.log', "✅ Completed and returning response\n", FILE_APPEND);
 
         $response = new Vtiger_Response();
         $response->setResult("✅ $emailsSent invites sent.");
         $response->emit();
+
     }
 }
 

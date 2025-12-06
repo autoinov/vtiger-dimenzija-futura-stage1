@@ -5,7 +5,7 @@ class Campaigns_SelectEventPopup_View extends Vtiger_Index_View {
         global $adb;
 
         // DEBUG: Log when popup is opened
-        file_put_contents(__DIR__ . '/../../debug_event_popup.txt', "Popup opened at " . date('c') . "\n", FILE_APPEND);
+        //file_put_contents(__DIR__ . '/../../debug_event_popup.txt', "Popup opened at " . date('c') . "\n", FILE_APPEND);
 
         $campaignId = $request->get('record');  // Must match `record={$CAMPAIGNID}` in the .tpl
 

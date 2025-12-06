@@ -33,13 +33,23 @@ function submitEventInvite() {
 
     app.request.post({url: 'index.php', data: data}).then(function(response) {
         app.helper.hideProgress();
+        console.log("Response received:", response);
+
         if (response && response.result) {
             app.helper.showSuccessNotification({message: response.result});
         } else {
             app.helper.showErrorNotification({message: '⚠️ No response returned.'});
         }
-        app.hideModalWindow();
+
+        setTimeout(() => app.hideModalWindow(), 1000);
+    }).fail(function(error) {
+        console.error("Request failed:", error);
+        app.helper.hideProgress();
+        app.helper.showErrorNotification({message: '❌ Request error occurred.'});
     });
 }
 </script>
 {/literal}
+
+
+
