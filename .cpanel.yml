@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/dimenzij/public_html/vtigerstage1
+    - /bin/cp -R * $DEPLOYPATH
