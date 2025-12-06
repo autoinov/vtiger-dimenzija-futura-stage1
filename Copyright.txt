@@ -1,4 +1,4 @@
-Edin
+
 This software is a collective work consisting of the following major Open Source components: 
 Apache software, MySQL server, PHP, SugarCRM, ADOdb, Smarty, PHPMailer, MagpieRSS and others, each licensed under a separate Open Source License. 
 vtiger.com is not affiliated with nor endorsed by any of the above providers.                  
