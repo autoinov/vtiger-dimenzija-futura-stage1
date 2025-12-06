@@ -9,11 +9,20 @@ class Campaigns_SendEventToContacts_Action extends Vtiger_Action_Controller {
         global $adb;
 
         $campaignId = $request->get('record');
-        $eventId = 4270; // Replace with your actual Event ID
+        $eventId = $request->get('eventid'); // ✅ Get from dropdown
+
+        if (empty($eventId)) {
+            $response = new Vtiger_Response();
+            $response->setResult("❌ No event selected.");
+            $response->emit();
+            return;
+        }
 
         $eventData = getEventDetails($eventId);
         if (!$eventData) {
-            echo json_encode(['result' => '❌ Event not found']);
+            $response = new Vtiger_Response();
+            $response->setResult("❌ Event not found.");
+            $response->emit();
             return;
         }
 
@@ -35,7 +44,9 @@ class Campaigns_SendEventToContacts_Action extends Vtiger_Action_Controller {
             }
         }
 
-        echo json_encode(['result' => "$emailsSent invites sent"]);
+        $response = new Vtiger_Response();
+        $response->setResult("✅ $emailsSent invites sent.");
+        $response->emit();
     }
 }
 
