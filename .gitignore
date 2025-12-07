@@ -26,8 +26,7 @@ php_debug.log
 debug.log
 
 # Cache & compiled templates
-cache/
-cache/*
+
 test/templates_c/
 test/templates_c/v7/*
 test/upload/
@@ -92,9 +91,12 @@ test/logo/logoV.jpg
 !test/
 !modules/Emails/handlers/actions/
 
+test/upload/images/*.png
+test/upload/images/*.jpg
+test/upload/images/*.jpeg
+test/upload/images/*.gif
 
-
-
+*.zip
 
 imap_raw.eml
 mail-dump.eml
