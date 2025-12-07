@@ -13,9 +13,7 @@ config_override.sample.php
 config.db.php
 config.security.php
 
-# Vendor – never commit for vtiger
-vendor/
-vendor/*
+
 
 # Logs and debug artifacts
 logs/
