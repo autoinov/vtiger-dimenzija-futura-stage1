@@ -1,3 +1,4 @@
+eos
 
 This software is a collective work consisting of the following major Open Source components: 
 Apache software, MySQL server, PHP, SugarCRM, ADOdb, Smarty, PHPMailer, MagpieRSS and others, each licensed under a separate Open Source License. 
