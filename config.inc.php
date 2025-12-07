@@ -47,7 +47,7 @@ $HELPDESK_SUPPORT_EMAIL_REPLY_ID = $HELPDESK_SUPPORT_EMAIL_ID;
 $dbconfig['db_server'] = 'localhost';
 $dbconfig['db_port'] = ':3306';
 $dbconfig['db_username'] = 'dimenzij_vtigst1';
-$dbconfig['db_password'] = '4(39p9Y(0S';
+$dbconfig['db_password'] = '943S1XT@p.';
 $dbconfig['db_name'] = 'dimenzij_vtigst1';
 $dbconfig['db_type'] = 'mysqli';
 $dbconfig['db_status'] = 'true';
@@ -156,7 +156,7 @@ $display_empty_home_blocks = false;
 $disable_stats_tracking = false;
 
 // Generating Unique Application Key
-$application_unique_key = 'zfpoclyaozkzweuul6fdv4gopurr2jtb';
+$application_unique_key = 'xl1jc5b8yvtdjbxtv0kmjyzzebnket5y';
 
 // trim descriptions, titles in listviews to this value
 $listview_max_textlength = '40';
