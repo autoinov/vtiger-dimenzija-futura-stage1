@@ -2,62 +2,54 @@
 # VTIGER CLEAN DEVELOPMENT
 ###############################
 
-# Allow main config files (needed for deploy)
+# === DO NOT TRACK vendor (critical) ===
+/vendor/
+/vendor/*
+
+# Allow main config files
 !config.inc.php
 !config.php
 !config_override.php
 
-# Ignore sensitive or local-only config files
+# Ignore sensitive or local-only config
 config_override.dev.php
 config_override.sample.php
 config.db.php
 config.security.php
 
-
-
-# Logs and debug artifacts
+# Logs & debug files
 logs/
 *.log
 error_log
-mailmanager_debug.log
-php_debug.log
 debug.log
+php_debug.log
+mailmanager_debug.log
 
 # Cache & compiled templates
-
 test/templates_c/
 test/templates_c/v7/*
-test/upload/
-test/upload/*
 
-# Temp & sessions
 tmp/
-tmp/*
 backup/
-backup/*
 session/
-session/*
 session_save_path/
 
-# Uploaded files – massive & environment-specific
+# Uploaded & large folders
 storage/
 storage/*
 
-# Auto-generated user privilege files
+# User privilege files
 user_privileges/
 user_privileges/*.php
 
-# Config Performance folder (auto-generated)
-config.performance.php
-
-# Hosting/system artifacts
+# System/hosting garbage
 .DS_Store
 Thumbs.db
 desktop.ini
 .ftpquota
 FETCH_HEAD
 
-# IDE/editor garbage
+# IDE junk
 .vscode/
 .idea/
 *.swp
@@ -65,37 +57,27 @@ FETCH_HEAD
 *.bak
 *.old
 
-# Git helper outputs
-git_diff_output.txt
-git_status_output.txt
-
 # Test images
 test/logo/logoV.jpg
 
 ###############################
-# Allow necessary source code
+# ALLOW ALL SOURCE CODE
 ###############################
 !modules/
-!libraries/
+!include/
+!includes/
 !layouts/
 !layouts/v7/
 !layouts/v7/modules/
+!libraries/
 !vtlib/
-!include/
-!includes/
 !languages/
 !cron/
 !pkg/
 !test/
-!modules/Emails/handlers/actions/
+!resources/
 
-test/upload/images/*.png
-test/upload/images/*.jpg
-test/upload/images/*.jpeg
-test/upload/images/*.gif
-
-*.zip
-
+# Unwanted tracked files
 imap_raw.eml
 mail-dump.eml
 modules/Emails/actions/debug.txt
